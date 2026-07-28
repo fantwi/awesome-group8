@@ -34,6 +34,37 @@ A framework-free PHP and MariaDB website developed as a Web Development group as
 
 XAMPP is the simplest option on Windows because it includes Apache, PHP and MariaDB.
 
+## Database schema setup
+
+The complete database script is `database/schema.sql`. It creates the
+`awesome_group` database when necessary, selects it, creates the `users` and
+`clients` tables, and inserts three sample client records.
+
+Import it from the project root with:
+
+```bash
+mariadb -u root -p < database/schema.sql
+```
+
+Enter the MariaDB root password when prompted. On Ubuntu installations that use
+socket authentication, use:
+
+```bash
+sudo mariadb < database/schema.sql
+```
+
+If you have already created an empty database named `awesome_group`, the same
+commands are safe to run because the script uses `CREATE DATABASE IF NOT EXISTS`
+and `CREATE TABLE IF NOT EXISTS`.
+
+To confirm that both tables were created:
+
+```bash
+sudo mariadb -e "USE awesome_group; SHOW TABLES;"
+```
+
+The result should list `clients` and `users`.
+
 ## Setup with XAMPP
 
 1. Install XAMPP and start **Apache** and **MySQL** from its control panel.
@@ -62,6 +93,101 @@ php -S localhost:8000
 ```
 
 Visit `http://localhost:8000`. MariaDB must still be running.
+
+## Setup on Ubuntu
+
+The following steps use Apache and MariaDB on Ubuntu.
+
+1. Update the package index and install the required software:
+
+   ```bash
+   sudo apt update
+   sudo apt install apache2 mariadb-server php libapache2-mod-php php-mysql rsync
+   ```
+
+2. Start Apache and MariaDB, and configure them to start automatically:
+
+   ```bash
+   sudo systemctl enable --now apache2
+   sudo systemctl enable --now mariadb
+   ```
+
+3. Optionally run MariaDB's security assistant:
+
+   ```bash
+   sudo mariadb-secure-installation
+   ```
+
+4. Copy the project into Apache's document root:
+
+   ```bash
+   sudo mkdir -p /var/www/html/awesome-group8
+   sudo rsync -a --exclude='.git' /home/fantwi/sites/awesome-group8/ /var/www/html/awesome-group8/
+   sudo chown -R "$USER":www-data /var/www/html/awesome-group8
+   sudo find /var/www/html/awesome-group8 -type d -exec chmod 755 {} \;
+   sudo find /var/www/html/awesome-group8 -type f -exec chmod 644 {} \;
+   ```
+
+5. Import the complete schema:
+
+   ```bash
+   cd /var/www/html/awesome-group8
+   sudo mariadb < database/schema.sql
+   ```
+
+6. Create a dedicated database account. Replace
+   `choose_a_strong_password` with your own password:
+
+   ```bash
+   sudo mariadb
+   ```
+
+   At the MariaDB prompt, run:
+
+   ```sql
+   CREATE USER IF NOT EXISTS 'awesome_user'@'localhost'
+       IDENTIFIED BY 'choose_a_strong_password';
+   GRANT ALL PRIVILEGES ON awesome_group.* TO 'awesome_user'@'localhost';
+   FLUSH PRIVILEGES;
+   EXIT;
+   ```
+
+7. For a quick local test, start PHP's development server with the database
+   settings supplied as environment variables:
+
+   ```bash
+   cd /home/fantwi/sites/awesome-group8
+   export DB_HOST=127.0.0.1
+   export DB_PORT=3306
+   export DB_NAME=awesome_group
+   export DB_USER=awesome_user
+   export DB_PASS=choose_a_strong_password
+   php -S localhost:8000
+   ```
+
+   Open `http://localhost:8000`, register an account, log in, and test the
+   records dashboard.
+
+8. When using the Apache copy instead, configure the same `DB_HOST`, `DB_PORT`,
+   `DB_NAME`, `DB_USER`, and `DB_PASS` variables in the Apache virtual host or
+   server environment, restart Apache, and open:
+
+   ```text
+   http://localhost/awesome-group8/
+   ```
+
+Check the installed PHP database driver with:
+
+```bash
+php -m | grep -i pdo_mysql
+```
+
+If no output appears, install `php-mysql` and restart Apache:
+
+```bash
+sudo apt install php-mysql
+sudo systemctl restart apache2
+```
 
 ## Custom database credentials
 
