@@ -4,11 +4,37 @@ $pageTitle = 'Home';
 $activePage = 'home';
 require __DIR__ . '/includes/header.php';
 
+// $members = [
+//     ['name' => 'Ebenezer Nana Annan', 'id' => 'MS/ITE/25/0041', 'image' => 'assets/images/ebenezer.svg', 'role' => 'Project Coordinator'],
+//     ['name' => 'Okyere-Darko Addai', 'id' => 'MS/ITE/25/0044', 'image' => 'assets/images/okyere.svg', 'role' => 'Database Developer'],
+//     ['name' => 'Frank Akrasi Antwi', 'id' => 'MS/ITE/25/0051', 'image' => 'assets/images/frank.svg', 'role' => 'Frontend Developer'],
+//     ['name' => 'Michael Essel', 'id' => 'MS/ITE/25/0053', 'image' => 'assets/images/michael.svg', 'role' => 'Quality Assurance'],
+// ];
 $members = [
-    ['name' => 'Ebenezer Nana Annan', 'id' => 'MS/ITE/25/0041', 'image' => 'assets/images/ebenezer.svg', 'role' => 'Project Coordinator'],
-    ['name' => 'Okyere-Darko Addai', 'id' => 'MS/ITE/25/0044', 'image' => 'assets/images/okyere.svg', 'role' => 'Database Developer'],
-    ['name' => 'Frank Akrasi Antwi', 'id' => 'MS/ITE/25/0051', 'image' => 'assets/images/frank.svg', 'role' => 'Frontend Developer'],
-    ['name' => 'Michael Essel', 'id' => 'MS/ITE/25/0053', 'image' => 'assets/images/michael.svg', 'role' => 'Quality Assurance'],
+    [
+        'name' => 'Ebenezer Nana Annan',
+        'id' => 'MS/ITE/25/0041',
+        'image' => 'assets/images/ebenezer.jpeg',
+        'role' => 'Group Member'
+    ],
+    [
+        'name' => 'Okyere-Darko Addai',
+        'id' => 'MS/ITE/25/0044',
+        'image' => 'assets/images/okyere.jpeg',
+        'role' => 'Group Member'
+    ],
+    [
+        'name' => 'Frank Akrasi Antwi',
+        'id' => 'MS/ITE/25/0051',
+        'image' => 'assets/images/frank.jpeg',
+        'role' => 'Group Member'
+    ],
+    [
+        'name' => 'Michael Essel',
+        'id' => 'MS/ITE/25/0053',
+        'image' => 'assets/images/michael.jpeg',
+        'role' => 'Group Member'
+    ],
 ];
 ?>
 <section class="hero">
